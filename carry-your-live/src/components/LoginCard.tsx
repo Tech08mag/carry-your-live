@@ -24,7 +24,7 @@ const LoginCard: React.FC = () => {
     if (username && password) {
       setToastMessage('Login successful!');
       setShowToast(true);
-      setTimeout(() => history.push('/to-do'), 2000); // redirect after success
+      setTimeout(() => history.push('/todo'), 2000); // redirect after success
     } else {
       setToastMessage('Please fill out all fields.');
       setShowToast(true);
