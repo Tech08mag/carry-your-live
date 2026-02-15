@@ -6,22 +6,17 @@ interface CreateTodoFormProps {
 
 export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => {
   const [title, setTitle] = useState('');
-  const [colorGroup, setColorGroup] = useState('red');
+  const [colorGroup, setColorGroup] = useState('purpleGradient'); // default custom color
   const [subTasks, setSubTasks] = useState<string[]>(['']);
 
-  // Add a new sub-task input
-  const addSubTask = () => {
-    setSubTasks([...subTasks, '']);
-  };
+  const addSubTask = () => setSubTasks([...subTasks, '']);
 
-  // Handle sub-task change
   const handleSubTaskChange = (index: number, value: string) => {
-    const updatedSubTasks = [...subTasks];
-    updatedSubTasks[index] = value;
-    setSubTasks(updatedSubTasks);
+    const updated = [...subTasks];
+    updated[index] = value;
+    setSubTasks(updated);
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
@@ -35,62 +30,71 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => 
 
     onAddTodo(newTodo);
 
-    // Reset form fields
     setTitle('');
     setSubTasks(['']);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md mb-6">
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">To-Do Title</label>
+    <form 
+      onSubmit={handleSubmit} 
+      className="bg-[#121212] p-6 rounded-2xl shadow-xl mb-6 text-white max-w-lg mx-auto"
+    >
+      {/* Title */}
+      <div className="mb-5">
+        <label className="block text-sm font-semibold mb-2">To-Do Title</label>
         <input
           type="text"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          onChange={e => setTitle(e.target.value)}
           placeholder="Enter to-do title"
           required
+          className="w-full p-3 rounded-lg bg-[#1a1a1a] border border-purpleCustom-dark focus:outline-none focus:ring-2 focus:ring-purpleCustom-light transition-colors duration-200"
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Color Group</label>
+      {/* Color Group */}
+      <div className="mb-5">
+        <label className="block text-sm font-semibold mb-2">Color Group</label>
         <select
           value={colorGroup}
-          onChange={(e) => setColorGroup(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          onChange={e => setColorGroup(e.target.value)}
+          className="w-full p-3 rounded-lg bg-[#1a1a1a] border border-purpleCustom-dark text-white focus:outline-none focus:ring-2 focus:ring-purpleCustom-light transition-colors duration-200"
         >
-          <option value="red">Red</option>
-          <option value="blue">Blue</option>
-          <option value="green">Green</option>
-          <option value="yellow">Yellow</option>
+          <option value="dark">Dark</option>
+          <option value="purpleLight">Purple Light</option>
+          <option value="purpleDark">Purple Dark</option>
+          <option value="purpleGradient">Purple Gradient</option>
         </select>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Sub-Tasks</label>
+      {/* Sub-Tasks */}
+      <div className="mb-5">
+        <label className="block text-sm font-semibold mb-2">Sub-Tasks</label>
         {subTasks.map((task, index) => (
-          <div key={index} className="mb-2 flex items-center">
+          <div key={index} className="mb-2">
             <input
               type="text"
               value={task}
-              onChange={(e) => handleSubTaskChange(index, e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              onChange={e => handleSubTaskChange(index, e.target.value)}
               placeholder={`Sub-task ${index + 1}`}
+              className="w-full p-3 rounded-lg bg-[#1a1a1a] border border-purpleCustom-dark focus:outline-none focus:ring-2 focus:ring-purpleCustom-light text-white transition-colors duration-200"
             />
           </div>
         ))}
         <button
           type="button"
           onClick={addSubTask}
-          className="text-blue-500 text-sm mt-2"
+          className="text-purpleCustom-light text-sm mt-2 hover:underline transition-colors duration-200"
         >
-          Add another sub-task
+          + Add another sub-task
         </button>
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+      {/* Submit */}
+      <button
+        type="submit"
+        className="w-full bg-gradient-to-r from-purpleCustom-dark to-purpleCustom-light hover:from-purpleCustom-light hover:to-purpleCustom-dark rounded-2xl p-3 font-semibold text-white shadow-md transition-all duration-300"
+      >
         Add To-Do
       </button>
     </form>
