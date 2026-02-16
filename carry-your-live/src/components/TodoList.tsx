@@ -1,5 +1,7 @@
+// src/components/TodoList.tsx
 import React from 'react';
-import { TodoItem, Todo } from './TodoItem';
+import { TodoItem } from './TodoItem';
+import { Todo } from './ToDo';
 
 interface TodoListProps {
   todos: Todo[];
@@ -7,11 +9,7 @@ interface TodoListProps {
   onDeleteTodo: (id: number) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({
-  todos,
-  onUpdateTodo,
-  onDeleteTodo,
-}) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, onUpdateTodo, onDeleteTodo }) => {
   if (todos.length === 0) {
     return (
       <div className="text-center text-gray-400 mt-6 italic">
@@ -33,3 +31,6 @@ export const TodoList: React.FC<TodoListProps> = ({
     </div>
   );
 };
+
+// Ensure that TodoList is exported correctly
+export default TodoList;

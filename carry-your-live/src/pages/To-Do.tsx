@@ -1,80 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { TodoList } from '../components/TodoList';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import TodoList from '../components/TodoList';
+import { CreateTodoForm } from '../components/CreateTodoForm';
+import ColorNavbar from '../components/ColorNavbar';
+import { Todo } from '../components/ToDo'; // Ensure correct path to the Todo interface
 
-export interface SubTask {
-  text: string;
-  done: boolean;
-}
+const ToDoPage: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]); // Your list of to-dos
+  const [selectedColor, setSelectedColor] = useState(''); // The selected color group for filtering
 
-export interface Todo {
-  id: number;
-  title: string;
-  done: boolean;
-  subTasks: SubTask[];
-  priority: 'low' | 'medium' | 'high'; // Priority levels
-  deadline: string; // Deadline in ISO format (e.g., '2023-12-31')
-  tags: string[]; // Tags for categorizing tasks
-  colorGroup: 'purpleLight';
-}
-
-const ToDo: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  // Load todos from localStorage when component mounts
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-  }, []);
-
-  // Save todos to localStorage whenever todos change
-  useEffect(() => {
-    if (todos.length > 0) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    }
-  }, [todos]);
-
-  const updateTodo = (id: number, updatedTodo: Todo) => {
-    const updatedTodos = todos.map((t) => (t.id === id ? updatedTodo : t));
-    setTodos(updatedTodos);
+  const addTodo = (newTodo: Todo) => {
+    setTodos([...todos, newTodo]);
   };
 
-  const deleteTodo = (id: number) => {
-    const updatedTodos = todos.filter((t) => t.id !== id);
-    setTodos(updatedTodos);
+  // Function to handle updating a todo
+  const onUpdateTodo = (id: number, updatedTodo: Todo) => {
+    setTodos(todos.map((todo) => (todo.id === id ? updatedTodo : todo)));
   };
-  
-  const history = useHistory();
-  const handleCreateTodo = () => {
-    history.push('/create-todo'); 
+
+  // Function to handle deleting a todo
+  const onDeleteTodo = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
+
+  // Filter todos by selected color
+  const filteredTodos = selectedColor
+    ? todos.filter((todo) => todo.colorGroup === selectedColor)
+    : todos;
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] p-6 text-white">
       {/* Header */}
       <header className="mb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-purple-400">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-purpleCustom-light">
           My To-Do List
         </h1>
         <p className="mt-2 text-gray-300">Stay organized with your tasks</p>
       </header>
-      {/* ToDo List */}
-      <section className="max-w-3xl mx-auto">
-        <TodoList
-          todos={todos}
-          onUpdateTodo={updateTodo}
-          onDeleteTodo={deleteTodo}
-        />
+
+      {/* Color Group Navbar */}
+      <ColorNavbar selectedColor={selectedColor} onSelectColor={setSelectedColor} />
+
+      {/* Add New Todo Form */}
+      <section className="mb-8 max-w-3xl mx-auto">
+        <CreateTodoForm onAddTodo={addTodo} />
       </section>
-      <button
-        onClick={handleCreateTodo}
-        className="fixed bottom-4 left-4 bg-purple-600 text-white w-16 h-16 rounded-lg shadow-xl hover:bg-purple-500 transition-transform transform hover:scale-105">
-        <span className="text-2xl">+</span>
-      </button>
+
+      {/* Display To-Do List */}
+      <section className="max-w-3xl mx-auto">
+        {filteredTodos.length > 0 ? (
+          <TodoList
+            todos={filteredTodos}
+            onUpdateTodo={onUpdateTodo}
+            onDeleteTodo={onDeleteTodo}
+          />
+        ) : (
+          <div className="text-center text-gray-400 mt-6 py-10 border-2 border-dashed border-gray-700 rounded-lg">
+            No to-dos yet. Add one above!
+          </div>
+        )}
+      </section>
     </div>
   );
 };
 
-export default ToDo;
+export default ToDoPage;
