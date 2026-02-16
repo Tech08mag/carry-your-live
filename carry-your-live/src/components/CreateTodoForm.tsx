@@ -6,6 +6,9 @@ interface CreateTodoFormProps {
     title: string;
     done: boolean;
     subTasks: { text: string; done: boolean }[];
+    priority: 'low' | 'medium' | 'high';
+    deadline: string;
+    tags: string[];
     colorGroup: 'purpleLight';
   }) => void;
 }
@@ -13,6 +16,9 @@ interface CreateTodoFormProps {
 export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => {
   const [title, setTitle] = useState('');
   const [subTasks, setSubTasks] = useState<string[]>(['']);
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [deadline, setDeadline] = useState('');
+  const [tags, setTags] = useState<string[]>(['']);
   const [colorGroup] = useState<'purpleLight'>('purpleLight');
 
   const handleSubTaskChange = (index: number, value: string) => {
@@ -34,6 +40,9 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => 
       title: title.trim(),
       done: false,
       subTasks: subTasks.filter((s) => s.trim()).map((s) => ({ text: s.trim(), done: false })),
+      priority,
+      deadline,
+      tags,
       colorGroup,
     };
     onAddTodo(newTodo);
@@ -41,6 +50,9 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => 
     // Reset form
     setTitle('');
     setSubTasks(['']);
+    setPriority('medium');
+    setDeadline('');
+    setTags(['']);
   };
 
   return (
@@ -86,6 +98,43 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => 
         >
           + Add Subtask
         </button>
+      </div>
+
+      {/* Priority */}
+      <div className="mb-3">
+        <label className="text-[#e0c7ff] mb-1">Priority</label>
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
+          className="w-full p-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      {/* Deadline */}
+      <div className="mb-3">
+        <label className="text-[#e0c7ff] mb-1">Deadline</label>
+        <input
+          type="date"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="w-full p-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+        />
+      </div>
+
+      {/* Tags */}
+      <div className="mb-3">
+        <label className="text-[#e0c7ff] mb-1">Tags</label>
+        <input
+          type="text"
+          value={tags.join(', ')}
+          onChange={(e) => setTags(e.target.value.split(',').map((tag) => tag.trim()))}
+          placeholder="Add tags (comma separated)"
+          className="w-full p-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+        />
       </div>
 
       {/* Submit Button */}

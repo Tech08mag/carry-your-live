@@ -1,46 +1,17 @@
-import React, { useState } from 'react';
-import { TodoItem } from './TodoItem';
-
-interface Todo {
-  id: number;
-  title: string;
-  done: boolean;
-  subTasks: { text: string; done: boolean }[];
-  colorGroup: 'red' | 'blue' | 'green' | 'yellow' | 'purpleLight' | 'purpleDark' | 'purpleGradient' | 'dark';
-}
+import React from 'react';
+import { TodoItem, Todo } from './TodoItem';
 
 interface TodoListProps {
   todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  onUpdateTodo: (id: number, updatedTodo: Todo) => void;
+  onDeleteTodo: (id: number) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, setTodos }) => {
-  const deleteTodo = (id: number) => setTodos(todos.filter((t) => t.id !== id));
-
-  const toggleDone = (id: number) =>
-    setTodos(
-      todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
-    );
-
-  const editTodo = (id: number, newTitle: string) =>
-    setTodos(
-      todos.map((t) => (t.id === id ? { ...t, title: newTitle } : t))
-    );
-
-  const toggleSubTask = (todoId: number, subIndex: number) =>
-    setTodos(
-      todos.map((t) =>
-        t.id === todoId
-          ? {
-              ...t,
-              subTasks: t.subTasks.map((s, i) =>
-                i === subIndex ? { ...s, done: !s.done } : s
-              ),
-            }
-          : t
-      )
-    );
-
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  onUpdateTodo,
+  onDeleteTodo,
+}) => {
   if (todos.length === 0) {
     return (
       <div className="text-center text-gray-400 mt-6 italic">
@@ -55,10 +26,8 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, setTodos }) => {
         <TodoItem
           key={todo.id}
           todo={todo}
-          onDelete={deleteTodo}
-          onToggleDone={toggleDone}
-          onEdit={editTodo}
-          onToggleSubTask={toggleSubTask}
+          onUpdate={onUpdateTodo}
+          onDelete={onDeleteTodo}
         />
       ))}
     </div>

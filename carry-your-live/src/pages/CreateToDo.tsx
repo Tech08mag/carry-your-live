@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { CreateTodoForm } from '../components/CreateTodoForm';
 import { TodoList } from '../components/TodoList';
-import { useHistory } from 'react-router-dom';
 
 export interface SubTask {
   text: string;
@@ -18,7 +18,8 @@ export interface Todo {
   colorGroup: 'purpleLight';
 }
 
-const ToDo: React.FC = () => {
+
+const CreateToDo: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   // Load todos from localStorage when component mounts
@@ -36,20 +37,7 @@ const ToDo: React.FC = () => {
     }
   }, [todos]);
 
-  const updateTodo = (id: number, updatedTodo: Todo) => {
-    const updatedTodos = todos.map((t) => (t.id === id ? updatedTodo : t));
-    setTodos(updatedTodos);
-  };
-
-  const deleteTodo = (id: number) => {
-    const updatedTodos = todos.filter((t) => t.id !== id);
-    setTodos(updatedTodos);
-  };
-  
-  const history = useHistory();
-  const handleCreateTodo = () => {
-    history.push('/create-todo'); 
-  };
+  const addTodo = (newTodo: Todo) => setTodos([newTodo, ...todos]);
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] p-6 text-white">
@@ -60,21 +48,13 @@ const ToDo: React.FC = () => {
         </h1>
         <p className="mt-2 text-gray-300">Stay organized with your tasks</p>
       </header>
-      {/* ToDo List */}
-      <section className="max-w-3xl mx-auto">
-        <TodoList
-          todos={todos}
-          onUpdateTodo={updateTodo}
-          onDeleteTodo={deleteTodo}
-        />
+
+      {/* Add Task Form */}
+      <section className="mb-8 max-w-3xl mx-auto">
+        <CreateTodoForm onAddTodo={addTodo} />
       </section>
-      <button
-        onClick={handleCreateTodo}
-        className="fixed bottom-4 left-4 bg-purple-600 text-white w-16 h-16 rounded-lg shadow-xl hover:bg-purple-500 transition-transform transform hover:scale-105">
-        <span className="text-2xl">+</span>
-      </button>
     </div>
   );
 };
 
-export default ToDo;
+export default CreateToDo;

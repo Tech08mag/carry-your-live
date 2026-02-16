@@ -5,6 +5,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import ToDo from './pages/To-Do';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import CreateToDo from './pages/CreateToDo';
 
 /* Ionic CSS imports */
 import '@ionic/react/css/core.css';
@@ -43,7 +44,9 @@ const App: React.FC = () => (
         <Route exact path="/register">
           <Register />
         </Route>
-
+        <Route exact path="/create-todo">
+          <CreateToDo />
+        </Route>
         <Route exact path="/todo">
           <ToDo />
         </Route>
