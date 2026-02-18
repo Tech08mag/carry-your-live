@@ -1,15 +1,18 @@
-// src/components/TodoList.tsx
 import React from 'react';
 import { TodoItem } from './TodoItem';
-import { Todo } from './ToDo';
+import { Todo } from '../../models/ToDo';
 
 interface TodoListProps {
   todos: Todo[];
-  onUpdateTodo: (id: number, updatedTodo: Todo) => void;
-  onDeleteTodo: (id: number) => void;
+  onUpdateTodo: (id: string, updatedTodo: Todo) => void;
+  onDeleteTodo: (id: string) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos, onUpdateTodo, onDeleteTodo }) => {
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  onUpdateTodo,
+  onDeleteTodo,
+}) => {
   if (todos.length === 0) {
     return (
       <div className="text-center text-gray-400 mt-6 italic">
@@ -31,6 +34,3 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onUpdateTodo, onDeleteTodo }
     </div>
   );
 };
-
-// Ensure that TodoList is exported correctly
-export default TodoList;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CreateTodoForm } from '../components/CreateTodoForm';
-import { TodoList } from '../components/TodoList';
+import { CreateTodoForm } from '../components/forms/CreateTodoForm';
 
 export interface SubTask {
   text: string;

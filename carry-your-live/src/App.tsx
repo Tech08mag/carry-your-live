@@ -30,29 +30,36 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        {/* Default route: login */}
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
+  <IonReactRouter>
+    <IonRouterOutlet>
+      <Route exact path="/" render={() => <Redirect to="/login" />} />
 
-        <Route exact path="/login">
-          <Login />
-        </Route>
+      <Route
+        exact
+        path="/login"
+        render={() => <Login key="login" />}
+      />
 
-        <Route exact path="/register">
-          <Register />
-        </Route>
-        <Route exact path="/create-todo">
-          <CreateToDo />
-        </Route>
-        <Route exact path="/todo">
-          <ToDo />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+      <Route
+        exact
+        path="/register"
+        render={() => <Register key="register" />}
+      />
+
+      <Route
+        exact
+        path="/create-todo"
+        render={() => <CreateToDo key="create-todo" />}
+      />
+
+      <Route
+        exact
+        path="/todo"
+        render={() => <ToDo key="todo" />}
+      />
+    </IonRouterOutlet>
+  </IonReactRouter>
+</IonApp>
 );
 
 export default App;
