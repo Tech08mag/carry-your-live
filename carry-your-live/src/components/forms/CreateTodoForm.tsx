@@ -4,15 +4,11 @@ import { Todo, SubTask } from '../../models/ToDo';
 
 interface CreateTodoFormProps {
   onAddTodo: (newTodo: Todo) => void;
-  customColors: string[]; // color group options
+  customColors: string[];
 }
 
-export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
-  onAddTodo,
-  customColors,
-}) => {
+const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo, customColors }) => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [subTasks, setSubTasks] = useState<string[]>(['']);
   const [colorGroup, setColorGroup] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -54,22 +50,12 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
       synced: false,
       deleted: false,
       deadline: deadline ? new Date(deadline).getTime() : undefined,
-      description: description.trim() || undefined,
     };
 
     onAddTodo(newTodo);
 
     // Reset form
     setTitle('');
-    setDescription('');
-    setSubTasks(['']);
-    setColorGroup('');
-    setDeadline('');
-  };
-
-  const handleReset = () => {
-    setTitle('');
-    setDescription('');
     setSubTasks(['']);
     setColorGroup('');
     setDeadline('');
@@ -78,18 +64,24 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#2b0a3c] p-6 rounded-2xl shadow-lg max-w-full space-y-4"
+      className="bg-[#2b0a3c] p-6 rounded-2xl shadow-lg space-y-4 max-w-full"
     >
-      <h3 className="text-xl font-bold text-[#e0c7ff] text-center">
-        Add New Task
-      </h3>
+      <h3 className="text-xl font-bold text-[#e0c7ff]">Add New Task</h3>
 
-      {/* Title */}
+      {/* Task Title */}
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Task title"
+        className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+      />
+
+      {/* Deadline */}
+      <input
+        type="date"
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
         className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
       />
 
@@ -124,23 +116,6 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
         </button>
       </div>
 
-      {/* Deadline */}
-      <input
-        type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
-      />
-
-      {/* Description */}
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Task description (optional)"
-        className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
-        rows={3}
-      />
-
       {/* Color Group */}
       <div>
         <label className="text-[#e0c7ff] mb-1 block">Color Group</label>
@@ -159,22 +134,13 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
         </select>
       </div>
 
-      {/* Buttons */}
+      {/* Submit Button */}
       <button
-          type="submit"
-          className="flex-1 py-2 bg-gradient-to-r from-[#6a1b9a] to-[#8e24aa] text-white font-semibold rounded-lg hover:scale-105 transition-transform"
-        >
-          Add Task
-        </button>
-      <div className="flex justify-between gap-4 mt-4">
-        <button
-          type="button"
-          onClick={handleReset}
-          className="flex-1 py-2 bg-gradient-to-r from-[#6a1b9a] to-[#8e24aa] text-white font-semibold rounded-lg hover:scale-105 transition-transform"
-        >
-          Reset
-        </button>
-      </div>
+        type="submit"
+        className="w-full py-2 bg-gradient-to-r from-[#6a1b9a] to-[#8e24aa] text-white font-semibold rounded-lg transition-transform hover:scale-105"
+      >
+        Add Task
+      </button>
     </form>
   );
 };

@@ -8,14 +8,14 @@ interface ColorNavbarProps {
   onRemoveColorGroup: (color: string) => void;
 }
 
-const ColorFilterBar: React.FC<ColorNavbarProps> = ({
+const ColorNavbar: React.FC<ColorNavbarProps> = ({
   selectedColor,
   onSelectColor,
   customColors,
   onAddColorGroup,
   onRemoveColorGroup,
 }) => {
-  const [newColor, setNewColor] = useState('');
+  const [newColor, setNewColor] = useState('#6a1b9a'); // default purple
 
   return (
     <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -33,20 +33,18 @@ const ColorFilterBar: React.FC<ColorNavbarProps> = ({
         />
       ))}
 
-      {/* Add new color */}
+      {/* Add new color using color picker */}
       <div className="flex items-center gap-2">
         <input
-          type="text"
+          type="color"
           value={newColor}
           onChange={(e) => setNewColor(e.target.value)}
-          placeholder="Add Color"
-          className="px-3 py-1 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-10 h-10 p-0 border-2 border-purple-600 rounded-full cursor-pointer transition-transform hover:scale-110"
         />
         <button
           onClick={() => {
-            if (newColor.trim()) {
-              onAddColorGroup(newColor.trim());
-              setNewColor('');
+            if (!customColors.includes(newColor)) {
+              onAddColorGroup(newColor);
             }
           }}
           className="px-3 py-1 bg-purple-600 hover:bg-purple-500 rounded-lg text-white font-semibold transition-transform hover:scale-105"
@@ -68,4 +66,4 @@ const ColorFilterBar: React.FC<ColorNavbarProps> = ({
   );
 };
 
-export default ColorFilterBar;
+export default ColorNavbar;
