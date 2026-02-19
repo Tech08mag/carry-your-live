@@ -25,3 +25,11 @@ export interface Todo {
   description?: string;
   subTasks: SubTask[];
 }
+
+export interface ColorNavbarProps {
+  selectedColor: string;
+  onSelectColor: (color: string) => void;
+  customColors: string[];
+  onAddColorGroup: (color: string) => void;
+  onRemoveColorGroup: (color: string) => void;
+}

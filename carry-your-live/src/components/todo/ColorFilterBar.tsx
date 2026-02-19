@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-interface ColorNavbarProps {
-  selectedColor: string;
-  onSelectColor: (color: string) => void;
-  customColors: string[];
-  onAddColorGroup: (color: string) => void;
-  onRemoveColorGroup: (color: string) => void;
-}
+import {ColorNavbarProps } from '../../models/ToDo'
 
 const ColorNavbar: React.FC<ColorNavbarProps> = ({
   selectedColor,

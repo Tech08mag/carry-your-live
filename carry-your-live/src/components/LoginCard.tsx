@@ -29,7 +29,7 @@ const LoginCard: React.FC<LoginCardProps> = ({ onLoginSuccess }) => {
 
       setTimeout(() => {
         onLoginSuccess(); // let parent handle navigation
-      }, 2000);
+      }, 1000);
     } else {
       setToastMessage('Please fill out all fields.');
       setShowToast(true);

@@ -2,10 +2,11 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import ToDo from './pages/To-Do';
+import ToDo from './pages/ToDo';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateToDo from './pages/CreateToDo';
+import Tabs from './pages/Tabs';
 
 /* Ionic CSS imports */
 import '@ionic/react/css/core.css';
@@ -55,7 +56,7 @@ const App: React.FC = () => (
       <Route
         exact
         path="/todo"
-        render={() => <ToDo key="todo" />}
+        render={() => <Tabs key="todo" />}
       />
     </IonRouterOutlet>
   </IonReactRouter>

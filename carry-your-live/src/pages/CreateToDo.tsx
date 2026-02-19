@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CreateTodoForm } from '../components/forms/CreateTodoForm';
-
-export interface SubTask {
-  text: string;
-  done: boolean;
-}
-
-export interface Todo {
-  id: number;
-  title: string;
-  done: boolean;
-  subTasks: SubTask[];
-  priority: 'low' | 'medium' | 'high'; // Priority levels
-  deadline: string; // Deadline in ISO format (e.g., '2023-12-31')
-  tags: string[]; // Tags for categorizing tasks
-  colorGroup: 'purpleLight';
-}
-
+import CreateTodoForm from "../components/forms/CreateTodoForm";
+import { Todo } from "../models/ToDo";
 
 const CreateToDo: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -50,9 +34,10 @@ const CreateToDo: React.FC = () => {
 
       {/* Add Task Form */}
       <section className="mb-8 max-w-3xl mx-auto">
-        <CreateTodoForm onAddTodo={addTodo} />
+        <CreateTodoForm onAddTodo={addTodo} customColors={[]} />
       </section>
     </div>
+
   );
 };
 
