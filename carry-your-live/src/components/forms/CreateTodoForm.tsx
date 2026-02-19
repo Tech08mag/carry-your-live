@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Todo, SubTask } from '../../models/ToDo';
+import { IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonDatetime, IonCard, IonCardContent } from '@ionic/react';
 
 interface CreateTodoFormProps {
   onAddTodo: (newTodo: Todo) => void;
-  customColors: string[];
 }
 
-const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo, customColors }) => {
+const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo }) => {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [subTasks, setSubTasks] = useState<string[]>(['']);
-  const [colorGroup, setColorGroup] = useState('');
   const [deadline, setDeadline] = useState('');
+  const [priority, setPriority] = useState<string>('Medium'); // Default priority
 
   const handleSubTaskChange = (index: number, value: string) => {
     const updated = [...subTasks];
@@ -25,7 +26,7 @@ const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo, customColors
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !colorGroup) return;
+    if (!title.trim()) return; // Ensure title is provided
 
     const now = Date.now();
     const todoId = uuid();
@@ -33,8 +34,8 @@ const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo, customColors
     const newTodo: Todo = {
       id: todoId,
       title: title.trim(),
+      description: description.trim(), // Add description to the new todo
       done: false,
-      color: colorGroup,
       subTasks: subTasks
         .filter((s) => s.trim())
         .map<SubTask>((s) => ({
@@ -50,97 +51,102 @@ const CreateTodoForm: React.FC<CreateTodoFormProps> = ({ onAddTodo, customColors
       synced: false,
       deleted: false,
       deadline: deadline ? new Date(deadline).getTime() : undefined,
+      priority: priority, // Add priority to the new todo
     };
 
     onAddTodo(newTodo);
 
     // Reset form
     setTitle('');
+    setDescription('');
     setSubTasks(['']);
-    setColorGroup('');
     setDeadline('');
+    setPriority('Medium'); // Reset priority
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-[#2b0a3c] p-6 rounded-2xl shadow-lg space-y-4 max-w-full"
-    >
-      <h3 className="text-xl font-bold text-[#e0c7ff]">Add New Task</h3>
-
-      {/* Task Title */}
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Task title"
-        className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
-      />
-
-      {/* Deadline */}
-      <input
-        type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        className="w-full px-4 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
-      />
-
-      {/* Subtasks */}
-      <div className="space-y-2">
-        {subTasks.map((sub, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <input
-              type="text"
-              value={sub}
-              onChange={(e) => handleSubTaskChange(index, e.target.value)}
-              placeholder={`Subtask ${index + 1}`}
-              className="flex-1 px-3 py-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+    <form onSubmit={handleSubmit}>
+      <IonCard className="mb-4">
+        <IonCardContent>
+          {/* Task Title */}
+          <IonItem>
+            <IonLabel position="floating">Task Title</IonLabel>
+            <IonInput
+              value={title}
+              onIonChange={(e) => setTitle(e.detail.value!)}
+              placeholder="Enter task title"
+              required
             />
-            {subTasks.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeSubTaskField(index)}
-                className="px-2 py-1 bg-red-600 hover:bg-red-500 rounded text-white font-bold transition-colors"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addSubTaskField}
-          className="px-4 py-1 bg-purple-600 hover:bg-purple-500 rounded text-white font-semibold transition-transform hover:scale-105"
-        >
-          + Add Subtask
-        </button>
-      </div>
+          </IonItem>
 
-      {/* Color Group */}
-      <div>
-        <label className="text-[#e0c7ff] mb-1 block">Color Group</label>
-        <select
-          value={colorGroup}
-          onChange={(e) => setColorGroup(e.target.value)}
-          className="w-full p-2 rounded-lg bg-[#3a1b4d] text-[#e0c7ff] border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        >
-          <option value="">Select a color group</option>
-          <option value="purpleLight">Purple Light</option>
-          {customColors.map((color, index) => (
-            <option key={index} value={color}>
-              {color}
-            </option>
+          {/* Description */}
+          <IonItem>
+            <IonLabel position="floating">Description</IonLabel>
+            <IonInput
+              value={description}
+              onIonChange={(e) => setDescription(e.detail.value!)}
+              placeholder="Enter task description"
+            />
+          </IonItem>
+
+          {/* Deadline */}
+          <IonItem>
+            <IonLabel position="floating">Deadline</IonLabel>
+            <IonDatetime
+              value={deadline}
+              onIonChange={(e) => {
+                const value = e.detail.value;
+                setDeadline(Array.isArray(value) ? value[0] : value || '');
+              }}
+              min={new Date().toISOString()}
+            />
+          </IonItem>
+
+          {/* Priority */}
+          <IonItem>
+            <IonLabel position="floating">Priority</IonLabel>
+            <IonSelect
+              value={priority}
+              onIonChange={(e) => setPriority(e.detail.value!)}
+              placeholder="Select priority"
+            >
+              <IonSelectOption value="Low">Low</IonSelectOption>
+              <IonSelectOption value="Medium">Medium</IonSelectOption>
+              <IonSelectOption value="High">High</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+
+          {/* Subtasks */}
+          {subTasks.map((sub, index) => (
+            <IonItem key={index}>
+              <IonLabel position="floating">{`Subtask ${index + 1}`}</IonLabel>
+              <IonInput
+                value={sub}
+                onIonChange={(e) => handleSubTaskChange(index, e.detail.value!)}
+                placeholder={`Subtask ${index + 1}`}
+              />
+              {subTasks.length > 1 && (
+                <IonButton
+                  fill="clear"
+                  color="danger"
+                  onClick={() => removeSubTaskField(index)}
+                  className="ion-no-margin"
+                >
+                  ✕
+                </IonButton>
+              )}
+            </IonItem>
           ))}
-        </select>
-      </div>
+          <IonButton expand="block" onClick={addSubTaskField} color="primary" className="mt-2">
+            + Add Subtask
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full py-2 bg-gradient-to-r from-[#6a1b9a] to-[#8e24aa] text-white font-semibold rounded-lg transition-transform hover:scale-105"
-      >
+      <IonButton expand="block" type="submit" color="success" className="mt-4">
         Add Task
-      </button>
+      </IonButton>
     </form>
   );
 };

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { IonPage, IonContent } from '@ionic/react';
 import { TodoList } from '../components/todo/TodoList';
 // ToDoPage.tsx
-import CreateTodoForm from '../components/forms/CreateTodoForm';
 import ColorFilterBar from '../components/todo/ColorFilterBar';
+import CreateToDoButton from '../components/buttons/CreateToDoButton';
 import { Todo } from '../models/ToDo';
 
 const ToDoPage: React.FC = () => {
@@ -57,11 +57,6 @@ const ToDoPage: React.FC = () => {
           onRemoveColorGroup={removeColorGroup}
         />
 
-        {/* Create Todo Form */}
-        <section className="mb-8 max-w-3xl mx-auto">
-          <CreateTodoForm onAddTodo={addTodo} customColors={customColors} />
-        </section>
-
         {/* Todo List */}
         <section className="max-w-3xl mx-auto">
           {filteredTodos.length > 0 ? (
@@ -76,6 +71,7 @@ const ToDoPage: React.FC = () => {
             </div>
           )}
         </section>
+        <CreateToDoButton />
       </IonContent>
     </IonPage>
   );

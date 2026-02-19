@@ -6,7 +6,6 @@ import ToDo from './pages/ToDo';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateToDo from './pages/CreateToDo';
-import Tabs from './pages/Tabs';
 
 /* Ionic CSS imports */
 import '@ionic/react/css/core.css';
@@ -56,7 +55,7 @@ const App: React.FC = () => (
       <Route
         exact
         path="/todo"
-        render={() => <Tabs key="todo" />}
+        render={() => <ToDo key="todo" />}
       />
     </IonRouterOutlet>
   </IonReactRouter>

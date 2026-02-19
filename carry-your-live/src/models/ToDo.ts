@@ -23,6 +23,7 @@ export interface Todo {
 
   deadline?: number; // optional timestamp for deadline
   description?: string;
+  priority?: string; // e.g. "Low", "Medium", "High"
   subTasks: SubTask[];
 }
 
